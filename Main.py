@@ -3,7 +3,7 @@ Name: Mainpy
 Proyect: PriorityGraph
 Autor: Jorge Pinilla López
 Date: 25/04/2017
-Version: 1.1
+Version: 1.1 - Debug
 Description: Test example for PriorityGraph class
 """
 
@@ -56,9 +56,6 @@ def main():
             numtraslados += 1
     print("-------------------------------------------")
     print("Numero de traslados -> " + str(numtraslados))
-
-
-
 
 
 

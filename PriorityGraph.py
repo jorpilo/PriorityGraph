@@ -3,7 +3,7 @@ Name: PriorityGraph.py
 Proyect: PriorityGraph
 Autor: Jorge Pinilla López
 Date: 25/04/2017
-Version: 1.1
+Version: 1.1 - Debug
 Description: Priority graph class and cicle search enforcing priorities
 """
 
@@ -63,14 +63,14 @@ class Graph:
                     result.append(route)
                 else:
                     if DEBUG:
-                        print ("Muerto")
+                        print("Muerto")
                     link.used = False
         return result
 
     def SearchCicleRecursive(self, link, start):
 
         newbase = link.to
-        options = filter(lambda link: link.used == False, newbase.to)
+        options = filter(lambda element: element.used is False and start not in element.deadNodes, newbase.to)
         deadlinks = []
         for option in options:
             option.used = True
@@ -84,6 +84,7 @@ class Graph:
                         link.used = False
                     return route
                 else:
+                    option.deadNodes.add(start)
                     deadlinks.append(option)
         for link in deadlinks:
             link.used = False
@@ -119,12 +120,14 @@ class Graph:
         to = None
         priority = None
         used = None
+        deadNodes = None
 
         def __init__(self, base, to, priority):
             self.base = base
             self.to = to
             self.priority = priority
             self.used = False
+            self.deadNodes = set()
 
         def __str__(self):
             return str(self.base) + " --> " + str(self.to) + " cost: " + str(self.priority)
