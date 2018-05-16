@@ -9,12 +9,12 @@ Description: Priority graph class and cicle search enforcing priorities
 
 from sortedcontainers import SortedListWithKey
 
-DEBUG = True
+DEBUG = False
 
 
 class Graph:
     nodes = dict()
-    links = SortedListWithKey(key=lambda item: item.priority)
+    links = SortedListWithKey(key=lambda item: -item.priority)
 
     def addNode(self, name):
         self.nodes[name] = self.Node(name)
@@ -90,6 +90,20 @@ class Graph:
             link.used = False
         return None
 
+    def __str__(self):
+        String = "Nodes: \n"
+        String += "-------------------\n"
+        for node in self.nodes.values():
+            String += node.str_full() + "\n"
+        String += "-------------------\n"
+        String += "Links: \n"
+        String += "-------------------\n"
+        for link in self.links:
+            String += str(link) + "\n"
+        return String
+
+    __repr__ = __str__
+
     class Node:
         name = None
         to = None
@@ -97,7 +111,7 @@ class Graph:
 
         def __init__(self, name):
             self.name = name
-            self.to = SortedListWithKey(key=lambda item: item.priority)
+            self.to = SortedListWithKey(key=lambda item: -item.priority)
             self.base = []
 
         def addTo(self, link):
@@ -115,6 +129,8 @@ class Graph:
                 String += str(link) + "\n"
             return String
 
+        __repr__ = __str__
+
     class Link:
         base = None
         to = None
@@ -130,16 +146,9 @@ class Graph:
             self.deadNodes = set()
 
         def __str__(self):
-            return str(self.base) + " --> " + str(self.to) + " cost: " + str(self.priority)
+            return str(self.base) + " --> " + str(self.to) + " Priority: " + str(self.priority)
 
-    def __str__(self):
-        String = "Nodes: \n"
-        String += "-------------------\n"
-        for node in self.nodes.values():
-            String += node.str_full() + "\n"
-        String += "-------------------\n"
-        String += "Links: \n"
-        String += "-------------------\n"
-        for link in self.links:
-            String += str(link) + "\n"
-        return String
+        def __eq__(self, other):
+            return self.base.name == other.base.name and self.to.name == other.to.name and self.priority == other.priority
+
+        __repr__ = __str__
